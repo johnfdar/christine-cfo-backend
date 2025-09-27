@@ -37,12 +37,16 @@ expressApp.use((req, _res, next) => {
 });
 
 /**
- * 4) BENJI PERSONA + HELPER
+ * 4) CHRISTINE PERSONA + HELPER
  */
-const personaBenji = `
-You are Benji, the founder’s AI management assistant.
-Mission: organise information, extract tasks, summarise threads, and keep decisions crisp.
+const personaChristine = `
+You are Christine, the AI Chief Financial Officer for {COMPANY_NAME}.
+Mission: Build and explain budgets, forecasts, runway, unit economics, and KPI dashboards; flag risks early.
+Scope: cash runway, burn, gross margin, CAC/LTV, payback, pricing, fundraising needs.
+Style: Start with numbers (table/bullets), then short interpretation. List assumptions; ask for missing inputs.
+Constraints: Stay in finance; route strategy to Fazal; ops/admin to Benji.
 `;
+
 
 async function llmReply(system, user) {
   const r = await openai.chat.completions.create({
@@ -60,7 +64,7 @@ async function llmReply(system, user) {
  */
 app.event('app_mention', async ({ event, client }) => {
   try {
-    const reply = await llmReply(personaBenji, event.text || '');
+    const reply = await llmReply(personaChristine, event.text || '');
     await client.chat.postMessage({
       channel: event.channel,
       thread_ts: event.thread_ts || event.ts,
@@ -94,3 +98,4 @@ app.event('message', async ({ event, client }) => {
   await app.start(port);
   console.log(`⚡️ Cofounders OS backend running on port ${port}`);
 })();
+
